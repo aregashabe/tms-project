@@ -26,3 +26,4 @@ C:\Users\Y\tms_project\tmscore\obj\Debug\net10.0\refint\tmscore.dll
 C:\Users\Y\tms_project\tmscore\obj\Debug\net10.0\tmscore.pdb
 C:\Users\Y\tms_project\tmscore\obj\Debug\net10.0\tmscore.genruntimeconfig.cache
 C:\Users\Y\tms_project\tmscore\obj\Debug\net10.0\ref\tmscore.dll
+C:\Users\Y\tms_project\tmscore\obj\Debug\net10.0\tmscore.sourcelink.json

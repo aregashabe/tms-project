@@ -61,3 +61,75 @@ new Quiz { Title = "C# Basics", CorrectAnswers = 18, TotalQuestions = 20 },
 new LabAssignment { Title = "Registration API", FunctionalityScore = 90m, CodeQualityScore =85m}
 ];
 PrintGradeReport(cohortAssessments);
+//.......................................... m1 lab 2 exercise 4...................................
+var service=new EnrollmenService();
+var validStudent= new Student{Id="stu-001",Name="Abeba",Age=23, GPA=3.2m};
+var validCourse=new Course{Code="maths123",Title="applidMathematcs",Capacity=3};
+var result=service.ProcessRegistration(validStudent,validCourse);
+Console.WriteLine($"Enrolled {result.StudentId} in Course {result.CourseCode} ");
+//test 2
+try
+{
+service.ProcessRegistration(null, validCourse);
+}
+catch (ArgumentNullException ex)
+{
+Console.WriteLine($"Guard caught: {ex.ParamName}");
+}
+// test 3
+var fullCourse = new Course { Code = "CS-402", Title = "Full Course", Capacity = 1 };
+fullCourse.EnrolledCount = 1;
+try
+{
+    service.ProcessRegistration(validStudent, fullCourse);
+}
+catch (InvalidOperationException ex)
+{
+Console.WriteLine($"Business rule: {ex.Message}");
+}
+//.............................................excersice 5..........................................
+//........................step 1.......................
+List<Student> students=new(){
+    new Student{Id="s1",Name="Dereje",Age=33,GPA=3.8m},
+    new Student{Id="s2",Name="Geremew",Age=25,GPA=2.4m},
+    new Student{Id="s3",Name="Serkalem",Age=30,GPA=3.1m},
+    new Student{Id="s4", Name="Yeabsira",Age=28,GPA=3.7m},
+    new Student{Id="s5",Name="Meseret",Age=42,GPA=3.4m},
+    new Student{Id="s6",Name="Tesfaye",Age=24,GPA=3.6m},
+    new Student{Id="s7",Name="MERON",Age=22,GPA=2.0m},
+    new Student{Id="s8",Name="yONAS",Age=21,GPA=1.8m}
+};
+//........................step 2.......................
+var stu=students.Where(s=>s.GPA >= 3.5m);
+foreach(var n in stu){
+    Console.WriteLine(n.Name);
+}
+var gpades=students.OrderByDescending(m=>m.GPA);
+foreach(var l in gpades){
+Console.WriteLine(l.Name);
+}
+//........................step 3.......................
+decimal averageGpa = students.Average(s=>s.GPA);
+Console.WriteLine($"Average GPA {averageGpa:F2}");
+//........................step 4.......................
+var standingGroups=students.GroupBy(s=>s.GPA switch{
+  >=3.5m=>"honor",
+    >=2.5m=>"good standing",
+    >=2.0m=>"academic warnning",
+    _ => "fail"
+});
+foreach (var c in standingGroups)
+{
+    Console.WriteLine($"\n{c.Key}:");
+
+    foreach (var student in c)
+    {
+        Console.WriteLine(student.Name);
+    }
+}
+
+//........................step 5.......................
+string[] backendCourses=["c#","asp.net course"];
+string[]frontendCourses=["typeScript","angular"];
+string[] fullCourses=[..backendCourses,..frontendCourses];
+Console.WriteLine(string.Join(", ", fullCourses));
