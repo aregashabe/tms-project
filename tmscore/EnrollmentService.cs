@@ -1,5 +1,5 @@
 ///.......................m1 lab 2 exercise 4.....................................................
-public class EnrollmenService{
+public class EnrollmentService{
     public EnrollmentRecord ProcessRegistration(Student?student,Course?course){
 if(student is null){
     throw new ArgumentNullException(nameof(student),"student is null");
@@ -8,6 +8,10 @@ if(course is null){
     throw new ArgumentNullException(nameof(course),"course is null");
 }
 if(course.Capacity<=0){
+    throw new InvalidOperationException("course is full");
+}
+if (course.EnrolledCount >= course.Capacity)
+{
     throw new InvalidOperationException("course is full");
 }
 string standing =student.GPA switch{

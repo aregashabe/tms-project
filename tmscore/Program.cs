@@ -207,3 +207,75 @@ foreach (var s in students)
 {
 Console.WriteLine($" {s.Name} GPA: {s.GPA}");
 }
+//....................................exersice 6 part B.........................................
+var enrollCourse = new Course { Code = "CRS-101", Title = "C# Mastery", Capacity = 2 };
+var enrollService = new EnrollmentService();
+var enrollments = new List<EnrollmentRecord>();
+var failures = new List<string>();
+async Task SendConfirmationAsync(Student student)
+{
+try
+{
+    await Task.Delay(100); // Simulate sending email
+Console.WriteLine($" Email sent to {student.Name}");
+}
+catch (Exception ex)
+{
+// Log the failure do NOT re-throw.
+// This is intentional fire-and-forget.
+Console.WriteLine($" Email failed for {student.Name}: {ex.Message}");
+}
+}
+sw.Restart();
+foreach (var student in students)
+{
+try
+{
+var record = enrollService.ProcessRegistration(student, enrollCourse);
+enrollCourse.EnrolledCount++;
+enrollments.Add(record);
+Console.WriteLine($" Enrolled: {student.Name}");
+await SendConfirmationAsync(student);
+}
+catch (InvalidOperationException ex)
+{
+failures.Add($"{student.Name}: {ex.Message}");
+Console.WriteLine($" Rejected: {student.Name} {ex.Message}");
+}
+// try
+// {
+// var overflowCourse = new Course { Code = "CRS-999", Title = "Overflow Test", Capacity = 0 };
+// enrollService.ProcessRegistration(
+// new Student { Id = "S99", Name = "Test", Age = 20, GPA = 3.0m },
+// overflowCourse
+// );
+ }
+
+// catch (CapacityReachedException ex)
+// {
+// Console.WriteLine($"\nDomain exception caught:");
+// Console.WriteLine($" Course: {ex.CourseCode}");
+// Console.WriteLine($" Message: {ex.Message}");
+// }
+// }
+sw.Stop();
+// Calculate class average GPA from loaded students
+decimal classAverage = students.Length > 0
+? students.Average(s => s.GPA)
+: 0m;
+// Print the final report
+Console.WriteLine("\n========== ENROLLMENT SUMMARY ==========");
+Console.WriteLine($"Total students loaded:{students.Length}");
+Console.WriteLine($"Successful enrollments: {enrollments.Count}");
+Console.WriteLine($"Failed enrollments:{failures.Count}");
+Console.WriteLine($"Class average GPA:{classAverage:F2}");
+Console.WriteLine($"Total elapsed time:{sw.ElapsedMilliseconds}ms");
+if (failures.Count > 0)
+{
+Console.WriteLine("\n--- Failure Details---");
+foreach (var failure in failures)
+{
+Console.WriteLine($" {failure}");
+}
+}
+Console.WriteLine("========================================");
